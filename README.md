@@ -1,4 +1,4 @@
-#Validation POC
+# Validation POC
 
 This is a proof of concept for validation / filtering of rdf data based on shacl shapes.
 
