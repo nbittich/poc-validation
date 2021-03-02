@@ -1,0 +1,8 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+application-profile:
+  default: ${DEFAULT_APPLICATION_PROFILE_PATH:classpath:default.shaclc}
+
+sparql:
+  endpoint: ${SPARQL_ENDPOINT:http://localhost:8890}
