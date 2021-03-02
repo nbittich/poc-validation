@@ -46,35 +46,47 @@ ex:Momo
 #### 1. Validate (default application profile):
 
 `POST http://localhost:8090/validate` 
+
 `Content-Type: text/turtle`
+
 `Body: (input data)`
 
 #### 2. Validate file (default application profile):
 
 `POST http://localhost:8090/validate-file` 
+
 `Content-Type: multipart/form-data`
+
 `Form data: data => data-to-validate.ttl`
 
 #### 3. Validate file using a custom application profile file:
 
 `POST http://localhost:8090/validate-file-with-shacl` 
+
 `Content-Type: multipart/form-data`
+
 `Form data: shapes=> shapes-file.ttl, data => data-to-validate.ttl`
 
 #### 4. Filter (default application profile):
 
 `POST http://localhost:8090/filter`
+
 `Content-Type: text/turtle`
+
 `Body: (input data)`
 
 #### 5. Filter file (default application profile):
 
 `POST http://localhost:8090/filter-file`
+
 `Content-Type: multipart/form-data`
+
 `Form data: data => data-to-filter.ttl`
 
 #### 6. Filter file using a custom application profile file:
 
 `POST http://localhost:8090/filter-file-with-shacl`
+
 `Content-Type: multipart/form-data`
+
 `Form data: shapes=> shapes-file.ttl, data => data-to-validate.ttl`
