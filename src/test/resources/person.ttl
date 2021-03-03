@@ -4,7 +4,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# Alice is valid
 ex:Alice
     a ex:Person ;
     ex:ssn "987-65-432A" .
