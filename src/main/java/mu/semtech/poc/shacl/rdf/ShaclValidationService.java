@@ -3,6 +3,9 @@ package mu.semtech.poc.shacl.rdf;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.shacl.ShaclValidator;
 import org.apache.jena.shacl.Shapes;
@@ -11,9 +14,12 @@ import org.apache.jena.shacl.engine.ShaclPaths;
 import org.apache.jena.shacl.validation.ReportEntry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.jena.vocabulary.RDF;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static mu.semtech.poc.shacl.rdf.ModelConverter.filenameToLang;
 import static mu.semtech.poc.shacl.rdf.ModelConverter.toModel;
@@ -67,19 +73,27 @@ public class ShaclValidationService {
   public Graph filter(InputStream dataModel, Lang modelLang, InputStream shapesModel, Lang shapesLang) {
     Graph dataGraph = toModel(dataModel, modelLang).getGraph();
     Graph shapesGraph = toModel(shapesModel, shapesLang).getGraph();
-    ValidationReport report = validate(dataGraph, Shapes.parse(shapesGraph));
-    return filter(dataGraph, report);
+    Shapes shapes = Shapes.parse(shapesGraph);
+    ValidationReport report = validate(dataGraph, shapes);
+    return filter(dataGraph, shapes, report);
   }
 
   public Graph filter(InputStream dataModel, Lang modelLang) {
     Graph dataGraph = toModel(dataModel, modelLang).getGraph();
     ValidationReport report = validate(dataGraph);
-    return filter(dataGraph, report);
+    return filter(dataGraph, applicationProfile, report);
   }
 
-  public Graph filter(Graph dataGraph, ValidationReport report) {
+  public Graph filter(Graph dataGraph, Shapes shapes, ValidationReport report) {
+    List<String> targetClasses = shapes.getTargetShapes().stream().flatMap(s -> s.getTargets().stream().map(t -> t.getObject().getURI())).collect(Collectors.toList());
     for (ReportEntry r : report.getEntries()) {
       dataGraph.remove(r.focusNode(),ShaclPaths.pathNode(r.resultPath()),null);
+    }
+
+    // filter the classes not defined as target shapes
+    List<String> classesNotDefinedAsTargetShapes = dataGraph.find(null, RDF.type.asNode(), null).filterDrop(triple -> targetClasses.contains(triple.getObject().getURI())).mapWith(triple -> triple.getSubject().getURI()).toList();
+    for (String sub : classesNotDefinedAsTargetShapes) {
+      dataGraph.remove(NodeFactory.createURI(sub),null,null);
     }
     return dataGraph;
   }

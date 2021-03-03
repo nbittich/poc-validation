@@ -23,3 +23,7 @@ ex:Calvin
 ex:Momo
     a ex:Person ;
     ex:ssn "987-65-4321" .
+
+ex:Agrougrou
+    a ex:Coucou;
+    ex:ssn "987-65-4321" .
