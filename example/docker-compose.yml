@@ -9,4 +9,7 @@ services:
     environment:
       SERVER_PORT: "8090"
       DEFAULT_APPLICATION_PROFILE_PATH: "file:/config/applicationProfile.ttl"
+      MAX_REQUEST_SIZE: "512MB"
+      MAX_FILE_SIZE: "512MB"
+      JAVA_OPTS: "-Xms512m -Xmx512m"
     restart: always
