@@ -53,7 +53,7 @@ ex:Momo
 
 #### 2. Validate file (default application profile):
 
-`POST http://localhost:8090/validate-file` 
+`POST http://localhost:8090/validate/file` 
 
 `Content-Type: multipart/form-data`
 
@@ -61,7 +61,7 @@ ex:Momo
 
 #### 3. Validate file using a custom application profile file:
 
-`POST http://localhost:8090/validate-file-with-shacl` 
+`POST http://localhost:8090/validate/file-with-shacl` 
 
 `Content-Type: multipart/form-data`
 
@@ -77,7 +77,7 @@ ex:Momo
 
 #### 5. Filter file (default application profile):
 
-`POST http://localhost:8090/filter-file`
+`POST http://localhost:8090/filter/file`
 
 `Content-Type: multipart/form-data`
 
@@ -85,8 +85,32 @@ ex:Momo
 
 #### 6. Filter file using a custom application profile file:
 
-`POST http://localhost:8090/filter-file-with-shacl`
+`POST http://localhost:8090/filter/file-with-shacl`
 
 `Content-Type: multipart/form-data`
 
 `Form data: shapes=> shapes-file.ttl, data => data-to-validate.ttl`
+
+#### 7. Difference between two rdf files:
+
+`POST http://localhost:8090/compare/difference`
+
+`Content-Type: multipart/form-data`
+
+`Form data: first=> first.ttl, second => second.ttl`
+
+#### 8. Intersection between two rdf files:
+
+`POST http://localhost:8090/compare/intersection`
+
+`Content-Type: multipart/form-data`
+
+`Form data: first=> first.ttl, second => second.ttl`
+
+#### 9. Equality between two rdf files:
+
+`POST http://localhost:8090/compare/equals`
+
+`Content-Type: multipart/form-data`
+
+`Form data: first=> first.ttl, second => second.ttl`

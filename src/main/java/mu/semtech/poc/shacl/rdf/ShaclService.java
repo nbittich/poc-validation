@@ -3,9 +3,7 @@ package mu.semtech.poc.shacl.rdf;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
-import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.shacl.ShaclValidator;
 import org.apache.jena.shacl.Shapes;
@@ -25,10 +23,10 @@ import static mu.semtech.poc.shacl.rdf.ModelConverter.filenameToLang;
 import static mu.semtech.poc.shacl.rdf.ModelConverter.toModel;
 
 @Service
-public class ShaclValidationService {
+public class ShaclService {
   private final Shapes applicationProfile;
 
-  public ShaclValidationService(Shapes applicationProfile) {
+  public ShaclService(Shapes applicationProfile) {
     this.applicationProfile = applicationProfile;
   }
 
@@ -85,13 +83,20 @@ public class ShaclValidationService {
   }
 
   public Graph filter(Graph dataGraph, Shapes shapes, ValidationReport report) {
-    List<String> targetClasses = shapes.getTargetShapes().stream().flatMap(s -> s.getTargets().stream().map(t -> t.getObject().getURI())).collect(Collectors.toList());
+    List<String> targetClasses = shapes
+            .getTargetShapes()
+            .stream()
+            .flatMap(s -> s.getTargets().stream().map(t -> t.getObject().getURI()))
+            .collect(Collectors.toList());
     for (ReportEntry r : report.getEntries()) {
       dataGraph.remove(r.focusNode(),ShaclPaths.pathNode(r.resultPath()),null);
     }
 
     // filter the classes not defined as target shapes
-    List<String> classesNotDefinedAsTargetShapes = dataGraph.find(null, RDF.type.asNode(), null).filterDrop(triple -> targetClasses.contains(triple.getObject().getURI())).mapWith(triple -> triple.getSubject().getURI()).toList();
+    List<String> classesNotDefinedAsTargetShapes = dataGraph
+            .find(null, RDF.type.asNode(), null)
+            .filterDrop(triple -> targetClasses.contains(triple.getObject().getURI()))
+            .mapWith(triple -> triple.getSubject().getURI()).toList();
     for (String sub : classesNotDefinedAsTargetShapes) {
       dataGraph.remove(NodeFactory.createURI(sub),null,null);
     }
@@ -113,7 +118,6 @@ public class ShaclValidationService {
     return filter(dataModel.getInputStream(), filenameToLang(dataModel.getOriginalFilename()),
             shapesFile.getInputStream(), filenameToLang(shapesFile.getOriginalFilename()));
   }
-
 
 
 }

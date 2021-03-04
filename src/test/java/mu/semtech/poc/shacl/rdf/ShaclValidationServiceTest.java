@@ -4,9 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.out.NodeFormatterTTL;
 import org.apache.jena.shacl.ValidationReport;
-import org.apache.jena.shacl.lib.ShLib;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import java.io.InputStream;
 @Slf4j
 class ShaclValidationServiceTest {
     @Autowired
-    private ShaclValidationService service;
+    private ShaclService service;
 
 
     @Test

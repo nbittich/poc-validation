@@ -14,20 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public interface ModelConverter {
 
   Logger LOG = LoggerFactory.getLogger(ModelConverter.class);
-
-  static String modelToLang(Model model, String lang) {
-    if (model.isEmpty()) throw new RuntimeException("model cannot be empty");
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    model.write(out, lang);
-    return out.toString();
-  }
+  String CONTENT_TYPE_TURTLE = "text/turtle";
 
   static Model toModel(String value, String lang) {
     if (StringUtils.isEmpty(value)) throw new RuntimeException("model cannot be empty");
@@ -40,6 +32,10 @@ public interface ModelConverter {
 
   static Model difference(Model firstModel, Model secondModel) {
     return firstModel.difference(secondModel);
+  }
+
+  static Model intersection(Model firstModel, Model secondModel) {
+    return firstModel.intersection(secondModel);
   }
 
   static Model toModel(InputStream is, String lang) {
@@ -59,25 +55,12 @@ public interface ModelConverter {
   static String convertModel(String model, String lang, String langToConvert) {
     Model graph = ModelFactory.createDefaultModel();
     graph.read(IOUtils.toInputStream(model, StandardCharsets.UTF_8), "", lang);
-    return modelToLang(graph, langToConvert);
-  }
-
-  static String inputStreamToLang(String filename, InputStream file, String lang) {
-    return modelToLang(inputStreamToModel(filename, file), lang);
+    return toString(graph, getRdfLanguage(langToConvert));
   }
 
   static Model inputStreamToModel(String filename, InputStream file) {
     String rdfFormat = filenameToLang(filename, RDFLanguages.TURTLE).getName();
     return toModel(file, rdfFormat);
-  }
-
-  static boolean checkFileFormat(String filename) {
-    try {
-      return filenameToLang(filename) != null;
-    } catch (Exception e) {
-      LOG.error("format not recognized", e);
-    }
-    return false;
   }
 
   static Lang filenameToLang(String filename) {
@@ -98,26 +81,6 @@ public interface ModelConverter {
 
   static Lang getRdfLanguage(String lang) {
     return RDFLanguages.nameToLang(lang);
-  }
-
-  static List<String> getLanguages() {
-    return RDFLanguages.getRegisteredLanguages()
-            .stream().map(Lang::getName).collect(Collectors.toList());
-  }
-
-  static List<String> getAllowedLanguages() {
-    return List.of(
-            "RDF/XML",
-            "N-Triples",
-            "TriX",
-            "JSON-LD",
-            "RDF-THRIFT",
-            "Turtle",
-            "SHACLC",
-            "N3",
-            "N-Quads",
-            "RDF/JSON",
-            "TriG");
   }
 
   static String toString(Model model, Lang lang) {
