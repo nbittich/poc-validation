@@ -1,9 +1,7 @@
 package mu.semtech.poc.shacl.rest;
 
 import mu.semtech.poc.shacl.rdf.ModelConverter;
-import org.apache.jena.graph.Graph;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
 import static mu.semtech.poc.shacl.rdf.ModelConverter.*;
-import static mu.semtech.poc.shacl.rdf.ModelConverter.CONTENT_TYPE_TURTLE;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;

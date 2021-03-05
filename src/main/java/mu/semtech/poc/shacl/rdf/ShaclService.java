@@ -33,7 +33,7 @@ public class ShaclService {
   @SneakyThrows
   public ValidationReport validate(MultipartFile shapesModel, MultipartFile dataModel) {
     return validate(dataModel.getInputStream(), filenameToLang(dataModel.getOriginalFilename()),
-            shapesModel.getInputStream(), filenameToLang(shapesModel.getOriginalFilename()));
+                    shapesModel.getInputStream(), filenameToLang(shapesModel.getOriginalFilename()));
   }
 
   @SneakyThrows
@@ -119,5 +119,14 @@ public class ShaclService {
             shapesFile.getInputStream(), filenameToLang(shapesFile.getOriginalFilename()));
   }
 
+  public JsonReport reportToJson(ValidationReport report) {
+    List<JsonReport.Entry> entries = report.getEntries().stream()
+            .map(e -> JsonReport.Entry.builder()
+                    .property(ShaclPaths.pathToString(e.resultPath()))
+                    .message(e.message())
+                    .build()
+            ).collect(Collectors.toList());
+    return JsonReport.builder().conforms(report.conforms()).entries(entries).build();
+  }
 
 }

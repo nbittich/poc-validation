@@ -1,9 +1,11 @@
 package mu.semtech.poc.shacl.rest;
 
+import mu.semtech.poc.shacl.rdf.JsonReport;
 import mu.semtech.poc.shacl.rdf.ModelConverter;
 import mu.semtech.poc.shacl.rdf.ShaclService;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.shacl.ValidationReport;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +23,10 @@ public class ValidationApi {
         this.service = service;
     }
 
-    @PostMapping(value = "/", produces = CONTENT_TYPE_TURTLE, consumes = CONTENT_TYPE_TURTLE)
-    public ResponseEntity<String> validate(@RequestBody String dataModel) {
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = CONTENT_TYPE_TURTLE)
+    public ResponseEntity<JsonReport> validate(@RequestBody String dataModel) {
         ValidationReport report = service.validate(dataModel, Lang.TURTLE);
-        return ResponseEntity.ok(ModelConverter.toString(report.getModel(), Lang.TURTLE));
+        return ResponseEntity.ok(service.reportToJson(report));
     }
 
     @PostMapping(value = "/file-with-shacl", produces = CONTENT_TYPE_TURTLE, consumes = MULTIPART_FORM_DATA_VALUE)

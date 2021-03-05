@@ -1,0 +1,54 @@
+@prefix ex:    <http://example.com/ns#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+[ a            sh:ValidationReport ;
+  sh:conforms  false ;
+  sh:result    [ a                             sh:ValidationResult ;
+                 sh:focusNode                  ex:Calvin ;
+                 sh:resultMessage              "WorksFor should be of type 'Company'" ;
+                 sh:resultPath                 ex:worksFor ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:ClassConstraintComponent ;
+                 sh:sourceShape                []  ;
+                 sh:value                      ex:UntypedCompany
+               ] ;
+  sh:result    [ a                             sh:ValidationResult ;
+                 sh:focusNode                  ex:Calvin ;
+                 sh:resultMessage              "Closed[http://example.com/ns#worksFor, http://example.com/ns#ssn, http://example.com/ns#address][http://www.w3.org/1999/02/22-rdf-syntax-ns#type] Property = <http://example.com/ns#www> : Object = \"kekee\"" ;
+                 sh:resultPath                 ex:www ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:ClosedConstraintComponent ;
+                 sh:sourceShape                ex:PersonShape ;
+                 sh:value                      "kekee"
+               ] ;
+  sh:result    [ a                             sh:ValidationResult ;
+                 sh:focusNode                  ex:Calvin ;
+                 sh:resultMessage              "Closed[http://example.com/ns#worksFor, http://example.com/ns#ssn, http://example.com/ns#address][http://www.w3.org/1999/02/22-rdf-syntax-ns#type] Property = <http://example.com/ns#birthDate> : Object = \"1971-07-07\"^^xsd:date" ;
+                 sh:resultPath                 ex:birthDate ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:ClosedConstraintComponent ;
+                 sh:sourceShape                ex:PersonShape ;
+                 sh:value                      "1971-07-07"^^xsd:date
+               ] ;
+  sh:result    [ a                             sh:ValidationResult ;
+                 sh:focusNode                  ex:Alice ;
+                 sh:resultMessage              "SSN is not valid" ;
+                 sh:resultPath                 ex:ssn ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:PatternConstraintComponent ;
+                 sh:sourceShape                _:b0 ;
+                 sh:value                      "987-65-432A"
+               ] ;
+  sh:result    [ a                             sh:ValidationResult ;
+                 sh:focusNode                  ex:Bob ;
+                 sh:resultMessage              "SSN is not valid" ;
+                 sh:resultPath                 ex:ssn ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:MaxCountConstraintComponent ;
+                 sh:sourceShape                _:b0
+               ]
+] .
