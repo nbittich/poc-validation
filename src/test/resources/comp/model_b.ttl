@@ -1,0 +1,27 @@
+@prefix ex: <http://example.com/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Alice
+    a ex:Person ;
+    ex:ssn "987-65-432A" ;
+    ex:xxx "oulala" .
+
+ex:Calvin
+    a ex:Person ;
+    ex:birthDate "1971-07-07"^^xsd:date ;
+    ex:ssn "987-65-4321";
+    ex:www "kekee";
+    ex:worksFor ex:UntypedCompany .
+
+# Momo is valid
+ex:Momo
+    a ex:Person ;
+    ex:ssn "987-65-4321" .
+
+
+ex:Agrougrou
+    a ex:Coucou; # Class coucou is not valid, will be completely filtered
+    ex:ssn "987-65-4321" .

@@ -26,7 +26,7 @@ public class FilterApi {
         this.service = service;
     }
 
-    @PostMapping(value = "/filter", produces = CONTENT_TYPE_TURTLE, consumes = CONTENT_TYPE_TURTLE)
+    @PostMapping(produces = CONTENT_TYPE_TURTLE, consumes = CONTENT_TYPE_TURTLE)
     public ResponseEntity<String> filter(@RequestBody String dataModel) {
         Graph result = service.filter(dataModel, Lang.TURTLE);
         return ResponseEntity.ok(ModelConverter.toString(ModelFactory.createModelForGraph(result), Lang.TURTLE));
